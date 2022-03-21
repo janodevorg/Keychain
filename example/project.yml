@@ -1,0 +1,56 @@
+name: Example
+options:
+  bundleIdPrefix: dev.jano.keychain.example
+  usesTabs: false
+  indentWidth: 4
+  tabWidth: 4
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: 15.4
+
+settings:
+    CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+    DEVELOPMENT_TEAM: PPSF6CNP8Q
+
+packages:
+
+  Keychain:
+    path: ..
+
+targets:
+
+  Example:
+    dependencies:
+      - package: Keychain
+    platform: iOS
+    settings:
+      CODE_SIGN_ENTITLEMENTS: Example.entitlements
+      CURRENT_PROJECT_VERSION: 1
+      DEVELOPMENT_TEAM: PPSF6CNP8Q
+      INFOPLIST_FILE: targets/main/Info.plist
+      IPHONEOS_DEPLOYMENT_TARGET: 15.4
+      MARKETING_VERSION: 1.0.0
+      PRODUCT_BUNDLE_IDENTIFIER: dev.jano.keychain.example
+      PRODUCT_NAME: Example
+    scheme:
+      testTargets:
+        - ExampleTests
+    sources:
+      - sources/main
+      - targets/main/Info.plist
+    type: application
+
+  ExampleTests:
+    dependencies:
+      - target: Example
+      - package: Keychain
+    platform: iOS
+    settings:
+      DEVELOPMENT_TEAM: PPSF6CNP8Q
+      INFOPLIST_FILE: targets/tests/Info.plist
+      IPHONEOS_DEPLOYMENT_TARGET: 15.4
+      PRODUCT_BUNDLE_IDENTIFIER: dev.jano.keychain.example.tests
+    sources:
+      - sources/tests
+      - targets/tests/Info.plist
+    type: bundle.unit-test

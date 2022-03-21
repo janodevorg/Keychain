@@ -1,0 +1,44 @@
+name: keychain
+
+options:
+  bundleIdPrefix: dev.jano.keychain
+  usesTabs: false
+  indentWidth: 4
+  tabWidth: 4
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: 15.0
+
+settings:
+    CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+
+targets:
+
+  Keychain:
+    type: framework
+    platform: iOS
+    scheme:
+      testTargets:
+         - KeychainTests
+    settings:
+       CURRENT_PROJECT_VERSION: 1
+       INFOPLIST_FILE: targets/main/Info.plist
+       IPHONEOS_DEPLOYMENT_TARGET: 15.0
+       PRODUCT_BUNDLE_IDENTIFIER: dev.jano.keychain
+       PRODUCT_NAME: Keychain
+    sources: 
+       - sources/main
+    type: framework
+
+  KeychainTests:
+    type: bundle.unit-test
+    platform: iOS
+    settings:
+      INFOPLIST_FILE: targets/tests/Info.plist
+      IPHONEOS_DEPLOYMENT_TARGET: 15.0
+      PRODUCT_BUNDLE_IDENTIFIER: dev.jano.keychain.tests
+      TEST_HOST:
+    sources:
+      - sources/tests
+    dependencies:
+      - target: Keychain
