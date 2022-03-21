@@ -1,3 +1,3 @@
-![Swift](https://github.com/janodev/Keychain/workflows/Swift/badge.svg?branch=main)
+[![Swift](https://github.com/janodevorg/Keychain/actions/workflows/swift.yml/badge.svg)](https://github.com/janodevorg/Keychain/actions/workflows/swift.yml)
 
-[Keychain wrapper](https://janodev.github.io/Keychain/documentation/keychain/).
+[Keychain wrapper](https://janodevorg.github.io/Keychain/documentation/keychain/).
