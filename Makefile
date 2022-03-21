@@ -5,6 +5,7 @@ PROJECT_NAME = $(shell ls | grep xcodeproj | head -1 | xargs -I{} xcodebuild -pr
 MODULE_NAME = $(shell ls | grep xcodeproj | head -1 | xargs -I{} xcodebuild -project {} -showBuildSettings | grep PRODUCT_MODULE_NAME | awk '{print $$NF}')
 TARGET_NAME = $(shell swift package dump-package | jq '.products[0].name' | tr -d '"')
 TARGET_NAME_LOWERCASE = $(shell echo ${TARGET_NAME} | tr '[:upper:]' '[:lower:]')
+GITHUB_USER = janodevorg
 
 .PHONY: clean help project requirebrew requirexcodegen resetgit swiftdoc swiftlint test xcodegen
 
@@ -13,6 +14,7 @@ help: requirebrew requirexcodegen
 	@echo ""
 	@echo "  make clean       - removes all generated products"
 	@echo "  make docc        - Generate documentation"
+	@echo "  make doccapp     - Generate documentation for UIKit project"
 	@echo "  make project     - generates a xcode project with local dependencies"
 	@echo "  make projecttest - Run tests using xcodebuild and a generated project"
 	@echo "  make spmcache    - Remove SPM cache"
@@ -42,7 +44,7 @@ docc: requirejq
 	--emit-digest
 	cat docs/linkable-entities.json | jq '.[].referenceURL' -r | sort > docs/all_identifiers.txt
 	sort docs/all_identifiers.txt | sed -e "s/doc:\/\/${TARGET_NAME}\/documentation\\///g" | sed -e "s/^/- \`\`/g" | sed -e 's/$$/``/g' > docs/all_symbols.txt
-	@echo "Check https://janodev.github.io/${TARGET_NAME}/documentation/${TARGET_NAME_LOWERCASE}/"
+	@echo "Check https://${GITHUB_USER}.github.io/${TARGET_NAME}/documentation/${TARGET_NAME_LOWERCASE}/"
 	@echo ""
 
 doccapp: requirejq
@@ -54,7 +56,7 @@ doccapp: requirejq
 		-scheme ${TARGET_NAME} \
 		-destination generic/platform=iOS \
 		OTHER_DOCC_FLAGS="--transform-for-static-hosting --hosting-base-path ${TARGET_NAME} --output-path docs"
-	@echo "Check https://janodev.github.io/${TARGET_NAME}/documentation/${TARGET_NAME_LOWERCASE}/"
+	@echo "Check https://${GITHUB_USER}.github.io/${TARGET_NAME}/documentation/${TARGET_NAME_LOWERCASE}/"
 	@echo ""
 
 swiftlint:
@@ -93,7 +95,7 @@ resetgit:
 	git init; \
 	git add .; \
 	git commit -m "Initial"; \
-	git remote add origin git@github.com:janodev/$$DIR.git; \
+	git remote add origin git@github.com:${GITHUB_USER}/$$DIR.git; \
 	git push --force --set-upstream origin main; \
 	git tag -d `git tag | grep -E '.'`; \
 	git ls-remote --tags origin | awk '/^(.*)(s+)(.*[a-zA-Z0-9])$$/ {print ":" $$2}' | xargs git push origin; \
