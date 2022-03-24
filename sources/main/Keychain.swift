@@ -130,6 +130,16 @@ final class Keychain
             return
         }
         let message = SecCopyErrorMessageString(status, nil) as String?
-        throw KeychainError.unexpectedStatus(statusCopy, message)
+        let keychainError = KeychainError.unexpectedStatus(statusCopy, message)
+        if status == errSecMissingEntitlement {
+            // -34018 A required entitlement isn't present.
+            let accessGroup = baseAttributes[kSecAttrAccessGroup as String]?.description ?? ""
+            log.error("""
+                \n🚨 \(String(status)) \(message ?? "")
+                Edit your app entitlements file to include the access group \"\(accessGroup)\"
+                For troubleshooting see https://developer.apple.com/forums/thread/114456
+            """)
+        }
+        throw keychainError
     }
 }
