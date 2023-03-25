@@ -18,13 +18,13 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build iOS
         run: |
-          set -o pipefail && xcodebuild test -scheme "Keychain-Package" -destination "OS=16.2,name=iPhone 14 Pro" -skipPackagePluginValidation | xcpretty
+          set -o pipefail && xcodebuild build -scheme "Keychain-Package" -destination "OS=16.2,name=iPhone 14 Pro" -skipPackagePluginValidation | xcpretty
       - name: Build macOS
         run: |
-          set -o pipefail && xcodebuild test -scheme "Keychain-Package" -destination "platform=macOS,arch=arm64" -skipPackagePluginValidation | xcpretty
+          set -o pipefail && xcodebuild build -scheme "Keychain-Package" -destination "platform=macOS,arch=arm64" -skipPackagePluginValidation | xcpretty
       - name: Build macCatalyst
         run: |
-          set -o pipefail && xcodebuild test -scheme "Keychain-Package" -destination "platform=macOS,arch=arm64,variant=Mac Catalyst" -skipPackagePluginValidation | xcpretty
+          set -o pipefail && xcodebuild build -scheme "Keychain-Package" -destination "platform=macOS,arch=arm64,variant=Mac Catalyst" -skipPackagePluginValidation | xcpretty
       - name: Build tvOS
         run: |
-          set -o pipefail && xcodebuild test -scheme "Keychain-Package" -destination "platform=tvOS Simulator,name=Apple TV 4K (3rd generation)" -skipPackagePluginValidation | xcpretty
+          set -o pipefail && xcodebuild build -scheme "Keychain-Package" -destination "platform=tvOS Simulator,name=Apple TV 4K (3rd generation)" -skipPackagePluginValidation | xcpretty
