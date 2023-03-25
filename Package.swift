@@ -4,11 +4,14 @@ import PackageDescription
 let package = Package(
     name: "Keychain",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v14),
+        .macCatalyst(.v14),
+        .macOS(.v12),
+        .tvOS(.v14)
     ],
     products: [
-        .library(name: "Keychain", type: .dynamic, targets: ["Keychain"]),
-        .library(name: "KeychainStatic", type: .static, targets: ["Keychain"])
+        .library(name: "Keychain", type: .static, targets: ["Keychain"]),
+        .library(name: "KeychainDynamic", type: .dynamic, targets: ["Keychain"])
     ],
     dependencies: [
         .package(url: "git@github.com:apple/swift-docc-plugin.git", from: "1.0.0")
