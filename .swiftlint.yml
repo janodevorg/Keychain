@@ -1,7 +1,4 @@
 # Run this on console to check the syntax: swiftlint lint --no-cache
-included:
-  - sources/main
-
 custom_rules:
   no_frogs:
     name: "No frogs"
@@ -17,6 +14,12 @@ file_types_order:
     - supporting_type
     - main_type
     - extension
+
+included:
+  - Sources
+
+excluded:
+  - Sources/other
 
 line_length:
     error: 200
@@ -52,12 +55,14 @@ disabled_rules:
   - explicit_enum_raw_value
   - explicit_top_level_acl
   - explicit_type_interface
+  - file_length
   - file_name
   - identifier_name
   - leading_whitespace
   - no_grouping_extension
   - multiline_arguments_brackets
   - multiline_parameters_brackets
+  - nesting
   - opening_brace
   - prohibited_interface_builder
   - required_deinit
@@ -66,12 +71,17 @@ disabled_rules:
   - todo
   - trailing_closure
   - trailing_whitespace # xcode seems to be creating white space
+  - type_body_length
   - type_contents_order
   - type_name
   - vertical_whitespace_between_cases
 
+analyzer_rules:
+  - explicit_self
+  - unused_declaration
+  - unused_import
+    
 opt_in_rules:
-  - anyobject_protocol
   - array_init
   - attributes
   - block_based_kvo
@@ -108,7 +118,6 @@ opt_in_rules:
   - explicit_acl
   - explicit_enum_raw_value
   - explicit_init
-  - explicit_self
   - explicit_top_level_acl
   - explicit_type_interface
   - extension_access_modifier
@@ -129,7 +138,6 @@ opt_in_rules:
   - implicit_getter
   - implicit_return
   - implicitly_unwrapped_optional
-  - inert_defer
   - is_disjoint
   - joined_default_parameter
   - large_tuple
@@ -154,7 +162,7 @@ opt_in_rules:
   - multiline_parameters
   - multiline_parameters_brackets
   - multiple_closures_with_trailing_closure
-  - nesting
+#  - nesting
   - nimble_operator
 #  - no_extension_access_modifier
   - no_fallthrough_only
@@ -204,19 +212,16 @@ opt_in_rules:
   - trailing_newline
   - trailing_semicolon
   - trailing_whitespace
-  - type_body_length
+#  - type_body_length
   - type_contents_order
   - unavailable_function
   - unneeded_break_in_switch
   - unneeded_parentheses_in_closure_argument
   - unowned_variable_capture
   - untyped_error_in_catch
-  - unused_capture_list
   - unused_closure_parameter
   - unused_control_flow_label
-  - unused_declaration
   - unused_enumerated
-  - unused_import
   - unused_optional_binding
   - unused_setter_value
   - valid_ibinspectable

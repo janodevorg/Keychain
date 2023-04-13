@@ -1,0 +1,1 @@
+[{"summary":"Linking to 'Keychain' from a Topics group in 'doc:\/\/Keychain\/documentation\/Keychain' isn't allowed","explanation":"The former is a module, and modules only exist at the root","source":"Keychain.md","severity":2,"notes":[],"start":{"line":67,"column":3}}]

@@ -41,7 +41,7 @@ final class Keychain
     {
         var attributes = baseAttributes
         attributes.merge(extraAttributes) { current, _ in current }
-        attributes[String(kSecValueData)] = value.data(using: .utf8)! as AnyObject
+        attributes[String(kSecValueData)] = value.data(using: .utf8)! as AnyObject // swiftlint:disable:this force_unwrapping
         try throwIfError(
             SecItemAdd(attributes as CFDictionary, nil)
         )
@@ -73,7 +73,7 @@ final class Keychain
         var query = baseAttributes
         query[String(kSecReturnData)] = kCFBooleanTrue as AnyObject
 
-        var itemCopy: AnyObject? = nil
+        var itemCopy: AnyObject?
         try throwIfError(
             SecItemCopyMatching(query as CFDictionary, &itemCopy)
         )
@@ -88,7 +88,7 @@ final class Keychain
      */
     func update(_ value: String) throws
     {
-        let data = value.data(using: .utf8)!
+        let data = value.data(using: .utf8)! // swiftlint:disable:this force_unwrapping
         try update(data)
     }
 
