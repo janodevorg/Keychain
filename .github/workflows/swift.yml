@@ -30,4 +30,7 @@ jobs:
           set -o pipefail && xcodebuild build -scheme "Keychain" -destination "platform=tvOS Simulator,name=Apple TV 4K (3rd generation)" -skipPackagePluginValidation | xcbeautify
       - name: Test iOS
         run: |
-		  cd Example && xcodegen && xcodebuild -scheme Example test -destination "OS=16.4,name=iPhone 14 Pro" -skipPackagePluginValidation | xcbeautify
+          cd Example
+          xcodegen
+          xcodebuild -scheme Example test -destination "OS=16.4,name=iPhone 14 Pro" -skipPackagePluginValidation | xcbeautify
+          cd ..
