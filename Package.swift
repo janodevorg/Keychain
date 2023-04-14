@@ -10,19 +10,18 @@ let package = Package(
         .tvOS(.v14)
     ],
     products: [
-        .library(name: "Keychain", type: .dynamic, targets: ["Keychain"]),
-        .library(name: "KeychainStatic", type: .static, targets: ["Keychain"]),
+        .library(name: "Keychain", targets: ["Keychain"])
     ],
     dependencies: [
         .package(url: "git@github.com:apple/swift-docc-plugin.git", from: "1.0.0")
-        // disabled because it creates problems building release versions: Missing package product 'SwiftLintPlugin@11'
+        // disabled because it creates problems building release versions. Error message: Missing package product 'SwiftLintPlugin@11'
         // .package(url: "git@github.com:realm/SwiftLint.git", from: "0.51.0")
     ],
     targets: [
         .target(
             name: "Keychain",
             path: "Sources/Keychain"
-//            plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
+            // plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
         )
     ]
 )
