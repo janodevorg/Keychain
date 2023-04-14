@@ -1,4 +1,4 @@
-// swift-tools-version:5.6
+// swift-tools-version:5.8
 import PackageDescription
 
 let package = Package(
@@ -14,16 +14,15 @@ let package = Package(
         .library(name: "KeychainStatic", type: .static, targets: ["Keychain"]),
     ],
     dependencies: [
-        .package(url: "git@github.com:apple/swift-docc-plugin.git", from: "1.0.0"),
-        .package(url: "git@github.com:realm/SwiftLint.git", from: "0.51.0")
+        .package(url: "git@github.com:apple/swift-docc-plugin.git", from: "1.0.0")
+        // disabled because it creates problems building release versions: Missing package product 'SwiftLintPlugin@11'
+        // .package(url: "git@github.com:realm/SwiftLint.git", from: "0.51.0")
     ],
     targets: [
         .target(
             name: "Keychain",
-            path: "Sources/Keychain",
-            plugins: [
-                .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
-            ]
+            path: "Sources/Keychain"
+//            plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
         )
     ]
 )
