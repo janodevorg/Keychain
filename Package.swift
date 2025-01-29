@@ -22,10 +22,10 @@ let package = Package(
             name: name,
             path: "Sources/\(name)"
             // plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
+        ),
+        .testTarget(
+            name: "\(name)Tests",
+            dependencies: [Target.Dependency(stringLiteral: name)]
         )
-    ],
-    .testTarget(
-        name: "\(name)Tests",
-        dependencies: [Target.Dependency(stringLiteral: name)]
-    ),
+    ]
 )
