@@ -11,7 +11,8 @@ let project = Project(
             name,
             destinations: [.iPhone, .iPad, .mac],
             product: .dynamicLibrary,
-            dependencies: []
+            dependencies: [],
+            resources: []
         ),
         .target(
             name: "\(name)Tests",

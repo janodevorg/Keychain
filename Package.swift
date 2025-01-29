@@ -6,10 +6,8 @@ let name = "Keychain"
 let package = Package(
     name: name,
     platforms: [
-        .iOS(.v14),
-        .macCatalyst(.v14),
-        .macOS(.v12),
-        .tvOS(.v14)
+        .iOS(.v18),
+        .macOS(.v15)
     ],
     products: [
         .library(name: name, targets: [name])
@@ -28,9 +26,6 @@ let package = Package(
     ],
     .testTarget(
         name: "\(name)Tests",
-        dependencies: [Target.Dependency(stringLiteral: name)],
-        resources: [
-            // .process("Resources")
-        ]
+        dependencies: [Target.Dependency(stringLiteral: name)]
     ),
 )
