@@ -5,7 +5,7 @@ import Security
 /// Stores a value as a generic password.
 public final class ValueKeychainStore: ValueStore
 {
-    private let log = Logger(subsystem: "dev.jano", category: "keychain")
+    private let log = LoggerFactory.keychain.logger()
     private let lock = NSRecursiveLock()
     private let keychain: Keychain
 
@@ -64,7 +64,7 @@ public final class ValueKeychainStore: ValueStore
 
         let string: String?
         do {
-            string = try keychain.read()
+            string = try keychain.readString()
         } catch let KeychainError.unexpectedStatus(status, _) where status == errSecItemNotFound {
             // -25300 The specified item could not be found in the keychain.
             return nil

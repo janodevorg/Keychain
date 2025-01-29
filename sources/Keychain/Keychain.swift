@@ -11,7 +11,7 @@ import Security
 */
 final class Keychain
 {
-    private let log = Logger(subsystem: "dev.jano", category: "keychain")
+    private let log = LoggerFactory.keychain.logger()
     private let baseAttributes: [String: AnyObject]
 
     init(type: KeychainType) {
@@ -41,7 +41,7 @@ final class Keychain
     {
         var attributes = baseAttributes
         attributes.merge(extraAttributes) { current, _ in current }
-        attributes[String(kSecValueData)] = value.data(using: .utf8)! as AnyObject // swiftlint:disable:this force_unwrapping
+        attributes[String(kSecValueData)] = Data(value.utf8) as AnyObject
         try throwIfError(
             SecItemAdd(attributes as CFDictionary, nil)
         )
@@ -52,10 +52,10 @@ final class Keychain
      - Returns: The value, or nil if not present.
      - Throws: KeychainError if operation fails
      */
-    func read() throws -> String?
+    func readString() throws -> String?
     {
         guard
-            let data: Data = try read(),
+            let data: Data = try readData(),
             let string = String(data: data, encoding: .utf8) else
         {
             return nil
@@ -68,7 +68,7 @@ final class Keychain
      - Returns: The value, or nil if not present.
      - Throws: KeychainError if operation fails
      */
-    func read() throws -> Data?
+    func readData() throws -> Data?
     {
         var query = baseAttributes
         query[String(kSecReturnData)] = kCFBooleanTrue as AnyObject
@@ -88,7 +88,7 @@ final class Keychain
      */
     func update(_ value: String) throws
     {
-        let data = value.data(using: .utf8)! // swiftlint:disable:this force_unwrapping
+        let data = Data(value.utf8)
         try update(data)
     }
 

@@ -1,8 +1,10 @@
-// swift-tools-version:5.8
-import PackageDescription
+// swift-tools-version:6.0
+@preconcurrency import PackageDescription
+
+let name = "Keychain"
 
 let package = Package(
-    name: "Keychain",
+    name: name,
     platforms: [
         .iOS(.v14),
         .macCatalyst(.v14),
@@ -10,7 +12,7 @@ let package = Package(
         .tvOS(.v14)
     ],
     products: [
-        .library(name: "Keychain", targets: ["Keychain"])
+        .library(name: name, targets: [name])
     ],
     dependencies: [
         .package(url: "git@github.com:apple/swift-docc-plugin.git", from: "1.0.0")
@@ -19,9 +21,16 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Keychain",
-            path: "Sources/Keychain"
+            name: name,
+            path: "Sources/\(name)"
             // plugins: [.plugin(name: "SwiftLintPlugin", package: "SwiftLint")]
         )
-    ]
+    ],
+    .testTarget(
+        name: "\(name)Tests",
+        dependencies: [Target.Dependency(stringLiteral: name)],
+        resources: [
+            // .process("Resources")
+        ]
+    ),
 )

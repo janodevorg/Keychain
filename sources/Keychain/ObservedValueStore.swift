@@ -34,11 +34,13 @@ public final class ObservedValueStore: ValueStore
     }
 
     public func set(_ value: String?) throws {
+        let localObservers: [(String?) -> Void]
         lock.lock()
-        defer { lock.unlock() }
-
         try valueStore.set(value)
-        for notify in observers.values {
+        localObservers = Array(observers.values)
+        lock.unlock()
+
+        for notify in localObservers {
             notify(value)
         }
     }
