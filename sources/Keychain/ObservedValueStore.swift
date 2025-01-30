@@ -3,7 +3,7 @@ import os
 
 /// Result from an observer registration.
 /// This object can be used by observers to unregister themselves.
-public final class Observation {
+public final class KeychainObservation {
     private let unregister: () -> Void
     public init(unregister: @escaping () -> Void) {
         self.unregister = unregister
@@ -46,14 +46,14 @@ public final class ObservedValueStore: ValueStore
     }
 
     @discardableResult
-    public func observeChanges(callback: @escaping (String?) -> Void) -> Observation {
+    public func observeChanges(callback: @escaping (String?) -> Void) -> KeychainObservation {
         lock.lock()
         defer { lock.unlock() }
 
         let id = UUID()
         observers[id] = callback
 
-        return Observation { [weak self] in
+        return KeychainObservation { [weak self] in
             guard let self = self else { return }
             self.lock.lock()
             defer { self.lock.unlock() }

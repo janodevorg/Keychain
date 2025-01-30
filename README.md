@@ -8,12 +8,11 @@
 
 To enable keychain item sharing:
 
-- Enable Keychain Sharing in target > Signing & Capabilities. Click the plus sign to add the 
-  capability Keychain Sharing.
-- Set a value in “Keychain Groups” for each shared keychain item. The value must start with the 
-  Bundle Seed ID, followed by an arbitrary string.
+- Enable Keychain Sharing in target > Signing & Capabilities. Click the plus sign to add the capability Keychain Sharing.
+- Set a value in "Keychain Groups" for your shared keychain items. The value must start with the
+Bundle Seed ID, followed by an arbitrary string. A single keychain group can store multiple items.
 
-This adds a file <TargetName>.entitlements, pointed by Build Settings > Code Signing 
+This adds a file <TargetName>.entitlements, pointed by Build Settings > Code Signing
 Entitlements, with something like:
 
 ```xml
@@ -30,7 +29,7 @@ Entitlements, with something like:
 ```
 
 The `$(AppIdentifierPrefix)` expands to your Team ID, so the final string might look like `PPSF6CNP8Q.myapp.credentials`.
-The Team ID is listed in the Member Center. 
+The Team ID is listed in the Member Center. You can store multiple keychain items (like API keys, tokens, passwords) within a single group. Each item in the group is identified by a unique key when you save it to the keychain.
 
 Note: If you’re just storing items locally for a single app, you can omit a custom access group and skip this setup. But if you use an accessGroup, make sure your test targets also have matching entitlements.
 
@@ -38,11 +37,11 @@ Note: If you’re just storing items locally for a single app, you can omit a cu
 
 Store a value as a generic password:
 ```swift
-let account = "an-arbitrary-string"
+let account = "OpenAI-key" // or other arbitrary string
 let accessGroup = "PPSF6CNP8Q.myapp.credentials"
 let store = ValueKeychainStore(accountName: account, accessGroup: accessGroup)
-store.set("some value")
-print(store.get()) // prints "some value"
+store.set("sk-proj-78Bmxfp9zMCrOauFJXuX") // set the key
+print(store.get()) // print the key
 ```
 
 Use the `ObservedValueStore` to react to updates:
@@ -139,15 +138,32 @@ For instance, the code below adds Codable support:
 
 ```swift
 extension ValueKeychainStore {
-    func setCodable<T: Encodable>(_ value: T) throws {
-        let data = try JSONEncoder().encode(value)
-        try set(String(data: data, encoding: .utf8))
+    func set<T: Encodable>(_ value: T?, accountName: String, accessGroup: String? = nil) throws {
+        if let value = value {
+            let data = try JSONEncoder().encode(value)
+            let string = String(data: data, encoding: .utf8)
+            try set(string)
+        } else {
+            try set(nil)
+        }
     }
     
-    func getCodable<T: Decodable>() throws -> T? {
+    func get<T: Decodable>(accountName: String, accessGroup: String? = nil) throws -> T? {
         guard let string = try get(),
-              let data = string.data(using: .utf8) else { return nil }
+              let data = string.data(using: .utf8) else { 
+            return nil 
+        }
         return try JSONDecoder().decode(T.self, from: data)
     }
 }
+
+struct User: Codable {
+    let id: String
+    let name: String
+}
+
+let store = ValueKeychainStore(accountName: "user-data", accessGroup: "TEAM_ID.myapp.credentials")
+let user = User(id: "123", name: "John")
+try store.set(user)
+let savedUser: User? = try store.get()
 ```
