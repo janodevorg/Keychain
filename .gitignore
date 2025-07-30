@@ -9,3 +9,5 @@ xcuserdata
 docs/all_identifiers.txt
 docs/all_symbols.txt
 *.xcodeproj
+*.xcworkspace
+Package.local.swift
