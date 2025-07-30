@@ -29,7 +29,7 @@ struct ValueKeychainStoreTests {
     }
 
     /// Verifies missing item throws an error on update/delete
-    @Test
+    @Test(.timeLimit(.minutes(1)))
     func testSetCreatesWhenMissing() throws {
         let store = ValueKeychainStore(
             accountName: "SomeNonExistent",

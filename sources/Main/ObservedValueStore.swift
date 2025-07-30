@@ -14,7 +14,7 @@ public final class KeychainObservation {
 }
 
 /// A store for a value that can be observed.
-public final class ObservedValueStore: ValueStore
+public final class ObservedValueStore: ValueStore, @unchecked Sendable
 {
     private let log = Logger(subsystem: "dev.jano", category: "mytumblr")
     private let lock = NSLock()
@@ -27,19 +27,14 @@ public final class ObservedValueStore: ValueStore
     }
 
     public func get() throws -> String? {
-        lock.lock()
-        defer { lock.unlock() }
-        
-        return try valueStore.get()
+        try lock.withLock {
+            try valueStore.get()
+        }
     }
 
     public func set(_ value: String?) throws {
-        let localObservers: [(String?) -> Void]
-        lock.lock()
         try valueStore.set(value)
-        localObservers = Array(observers.values)
-        lock.unlock()
-
+        let localObservers = lock.withLock { Array(observers.values) }
         for notify in localObservers {
             notify(value)
         }
@@ -47,17 +42,34 @@ public final class ObservedValueStore: ValueStore
 
     @discardableResult
     public func observeChanges(callback: @escaping (String?) -> Void) -> KeychainObservation {
-        lock.lock()
-        defer { lock.unlock() }
-
-        let id = UUID()
-        observers[id] = callback
+        let id = lock.withLock {
+            let id = UUID()
+            observers[id] = callback
+            return id
+        }
 
         return KeychainObservation { [weak self] in
-            guard let self = self else { return }
-            self.lock.lock()
-            defer { self.lock.unlock() }
-            self.observers.removeValue(forKey: id)
+            _ = self?.lock.withLock {
+                self?.observers.removeValue(forKey: id)
+            }
         }
     }
 }
+
+@available(macOS 10.15, iOS 13.0, watchOS 6.0, tvOS 13.0, *)
+public extension ObservedValueStore {
+    func get() async throws -> String? {
+        try await valueStore.get()
+    }
+
+    func set(_ value: String?) async throws {
+        try await valueStore.set(value)
+        let localObservers = lock.withLock { Array(observers.values) }
+        for notify in localObservers {
+            notify(value)
+        }
+    }
+}
+
+
+

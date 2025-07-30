@@ -1,7 +1,6 @@
 import Foundation
 
-public enum KeychainError: Error, CustomStringConvertible, CustomDebugStringConvertible
-{
+public enum KeychainError: Error, CustomStringConvertible, CustomDebugStringConvertible {
     case unexpectedStatus(OSStatus, _ description: String?)
 
     var localizedString: String {
