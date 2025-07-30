@@ -4,7 +4,7 @@
 <dict>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)group.dev.jano.apple</string>
+		<string>23KN7M4FPW.group.dev.jano.apple</string>
 	</array>
 </dict>
 </plist>

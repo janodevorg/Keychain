@@ -1,1 +1,1 @@
-let accessGroup = "PPSF6CNP8Q.dev.jano.keychain.example"
+let accessGroup = "23KN7M4FPW.group.dev.jano.apple"

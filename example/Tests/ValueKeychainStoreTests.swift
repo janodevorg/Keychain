@@ -1,26 +1,27 @@
+import Foundation
 import Keychain
-import XCTest
+import Testing
 
-final class ValueKeychainStoreTests: XCTestCase
-{
-    func testReadWrite() async throws
-    {
+@Suite("ValueKeychainStore Tests")
+struct ValueKeychainStoreTests {
+    @Test("Read and write operations")
+    func readWrite() async throws {
         let account = "test-safeToDelete-\(UUID().uuidString)"
         let keychain = ValueKeychainStore(accountName: account, accessGroup: accessGroup)
 
         // initially empty
-        let expectedNil = try keychain.get()
-        XCTAssertNil(expectedNil)
+        let expectedNil = try await keychain.get()
+        #expect(expectedNil == nil)
 
         // set a value
         let value = "bananas"
-        try keychain.set(value)
-        let expectedValue = try keychain.get()
-        XCTAssertEqual(expectedValue, value)
+        try await keychain.set(value)
+        let expectedValue = try await keychain.get()
+        #expect(expectedValue == value)
 
         // remove the value
-        try keychain.set(nil)
-        let expectedRemoved = try keychain.get()
-        XCTAssertNil(expectedRemoved)
+        try await keychain.set(nil as String?)
+        let expectedRemoved = try await keychain.get()
+        #expect(expectedRemoved == nil)
     }
 }

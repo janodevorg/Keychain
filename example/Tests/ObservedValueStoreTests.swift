@@ -1,29 +1,32 @@
+import Foundation
 import Keychain
-import XCTest
+import Testing
 
-final class ObservedValueStoreTests: XCTestCase
-{
-    private var store: ObservedValueStore!
-    private let account = "test-deleteme-\(UUID().uuidString)"
-    private var observedValue: String? = ""
-
-    func testObservation() async throws
-    {
+@Suite("ObservedValueStore Tests")
+struct ObservedValueStoreTests {
+    @Test("Observation functionality")
+    func observation() async throws {
+        let account = "test-deleteme-\(UUID().uuidString)"
         let keychain = ValueKeychainStore(accountName: account, accessGroup: accessGroup)
-        store = ObservedValueStore(valueStore: keychain)
-        let observation = store.observeChanges { [weak self] value in
-            self?.observedValue = value
+        let store = ObservedValueStore(valueStore: keychain)
+        
+        var observedValue: String? = ""
+        let observation = store.observeChanges { value in
+            observedValue = value
         }
 
         // when writing, it notifies observers
         let bananas = "bananas"
-        try store.set(bananas)
-        XCTAssertEqual(observedValue, bananas)
+        try await store.set(bananas)
+        #expect(observedValue == bananas)
 
-        // when I stop observing and write, it doesn’t notify observers
+        // when I stop observing and write, it doesn't notify observers
         observation.stopObserving()
         let oranges = "oranges"
-        try store.set(oranges)
-        XCTAssertNotEqual(observedValue, oranges)
+        try await store.set(oranges)
+        #expect(observedValue != oranges)
+        
+        // Clean up
+        try? await store.set(nil as String?)
     }
 }

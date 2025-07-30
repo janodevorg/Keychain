@@ -1,26 +1,9 @@
-#!/bin/bash -e -o pipefail
+PROJECT_NAME = Example
+MK_DIR = ../mk
 
-.PHONY: help clean project
+# Check if mk directory exists
+ifeq ($(wildcard $(MK_DIR)),)
+    $(warning WARNING: mk directory not found. Please run 'git submodule update --init --recursive' to initialize the build tools)
+endif
 
-help:
-	@echo Usage:
-	@echo ""
-	@echo "  make clean   - removes all generated products"
-	@echo "  make project - generates a project with local dependencies"
-	@echo ""
-
-project: 
- ifeq (, $(shell which brew))
- 	$(error "Error: No brew installed. Install it from https://brew.sh/")
- endif
- ifeq (, $(shell which xcodegen))
- 	$(error "Error: No xcodegen installed. Install with: brew install xcodegen")
- endif
-	rm -rf Example.xcodeproj || true
-	xcodegen generate --project . --spec project.yml && open Example.xcodeproj
-
-clean:
-	rm -rf .build
-	rm -rf .swiftpm
-	rm -rf build
-	rm Package.resolved
+include $(MK_DIR)/xcode.mk

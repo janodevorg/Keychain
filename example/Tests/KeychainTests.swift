@@ -1,64 +1,67 @@
-@testable import Keychain
+import Foundation
+import Keychain
 import os
-import XCTest
+import Testing
 
-final class KeychainTests: XCTestCase
-{
+@Suite("ValueKeychainStore Low-Level Tests")
+struct ValueKeychainStoreLowLevelTests {
     private let account = "test-safetodelete-\(UUID().uuidString)"
-    private var keychain: Keychain!
     private let log = Logger(subsystem: "dev.jano", category: "keychain")
-
-    override func setUp() async throws {
-        keychain = Keychain(type:
-            KeychainType.genericPassword(
-                account: account,
-                accessGroup: accessGroup
-            )
-        )
-        do {
-            let _: String? = try keychain.read()
-            try keychain.delete()
-        } catch let KeychainError.unexpectedStatus(status, _) where status == errSecItemNotFound {
-            // -25300 The specified item could not be found in the keychain.
-        } catch {
-            XCTFail()
-        }
-        log.debug("Setup completed.")
+    
+    private var keychain: ValueKeychainStore {
+        ValueKeychainStore(accountName: account, accessGroup: accessGroup)
     }
 
-    func testCreateRead() async throws {
+    @Test("Store and retrieve value")
+    func storeRetrieveValue() async throws {
+        let keychain = self.keychain
+        
+        // Clean up any existing value
+        try? await keychain.set(nil as String?)
+        
         let value = "green"
-        try keychain.create(value, extraAttributes: [
-            String(kSecAttrDescription): NSString("A twitter password"), // human readable
-            String(kSecAttrLabel): NSString("Twitter password.") // visible label
-        ])
-        let actual: String? = try keychain.read()
-        XCTAssertEqual(value, actual)
-        log.debug("It reads a value created.")
+        try await keychain.set(value)
+        let actual = try await keychain.get()
+        #expect(actual == value)
+        log.debug("It stores and retrieves a value.")
+        
+        // Clean up
+        try? await keychain.set(nil as String?)
     }
 
-    func testCreateUpdateRead() async throws {
-        let value = "green"
-        try keychain.create("orange")
-        try keychain.update(value)
-        let actual: String? = try keychain.read()
-        XCTAssertEqual(value, actual)
-        log.debug("It creates, updates, and reads the updated value.")
+    @Test("Update existing value")
+    func updateValue() async throws {
+        let keychain = self.keychain
+        
+        // Clean up any existing value
+        try? await keychain.set(nil as String?)
+        
+        let originalValue = "orange"
+        let updatedValue = "green"
+        
+        try await keychain.set(originalValue)
+        try await keychain.set(updatedValue)
+        let actual = try await keychain.get()
+        #expect(actual == updatedValue)
+        log.debug("It updates an existing value.")
+        
+        // Clean up
+        try? await keychain.set(nil as String?)
     }
 
-    func testCreateDelete() async throws {
+    @Test("Delete value")
+    func deleteValue() async throws {
+        let keychain = self.keychain
+        
+        // Clean up any existing value
+        try? await keychain.set(nil as String?)
+        
         let value = "green"
-        try keychain.create(value)
-        try keychain.delete()
-        do {
-            let _: String? = try keychain.read()
-            XCTFail("Expected to throw not found -25300")
-        } catch {
-            guard case let KeychainError.unexpectedStatus(status, _) = error, status == -25300 else {
-                XCTFail("Expected item not to be found.")
-                return
-            }
-        }
-        log.debug("It creates, deletes, and can’t find the value deleted.")
+        try await keychain.set(value)
+        try await keychain.set(nil as String?) // Delete by setting to nil
+        
+        let actual = try await keychain.get()
+        #expect(actual == nil)
+        log.debug("It deletes a value by setting to nil.")
     }
 }

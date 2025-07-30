@@ -12,7 +12,13 @@
 
   },
   "testTargets" : [
-
+    {
+      "target" : {
+        "containerPath" : "container:Example.xcodeproj",
+        "identifier" : "3591DD4F91C09DA5DF92CC1F",
+        "name" : "ExampleTests"
+      }
+    }
   ],
   "version" : 1
 }

@@ -3,12 +3,12 @@ import Testing
 
 @Suite
 struct ValueKeychainStoreTests {
+    let testAccessGroup = "23KN7M4FPW.group.dev.jano.apple"
 
     /// Verifies create, read, update, delete
     @Test
     func testCRUDOperations() throws {
-        // Replace with valid account + access group 
-        let testAccessGroup = "dev.jano.recallkit.tests"
+        // Replace with valid account + access group
         let store = ValueKeychainStore(accountName: "MyTestAccount", accessGroup: testAccessGroup)
         
         // 1. Initially no value
@@ -33,7 +33,7 @@ struct ValueKeychainStoreTests {
     func testSetCreatesWhenMissing() throws {
         let store = ValueKeychainStore(
             accountName: "SomeNonExistent",
-            accessGroup: "dev.jano.recallkit.tests"
+            accessGroup: testAccessGroup
         )
 
         try store.set("NewValue")
