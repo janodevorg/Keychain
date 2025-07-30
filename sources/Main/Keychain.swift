@@ -9,7 +9,7 @@ import Security
 */
 final class Keychain: @unchecked Sendable {
     private let log = LoggerFactory.keychain.logger()
-    private let lock = NSRecursiveLock()
+    private let lock = NSLock()
     private let baseAttributes: [String: AnyObject]
 
     init(type: KeychainType) {
@@ -54,7 +54,7 @@ final class Keychain: @unchecked Sendable {
     func readString() throws -> String? {
         try lock.withLock {
             guard
-                let data: Data = try readData(),
+                let data: Data = try _readData(),
                 let string = String(data: data, encoding: .utf8)
             else {
                 return nil
@@ -70,15 +70,19 @@ final class Keychain: @unchecked Sendable {
      */
     func readData() throws -> Data? {
         try lock.withLock {
-            var query = baseAttributes
-            query[String(kSecReturnData)] = kCFBooleanTrue as AnyObject
-
-            var itemCopy: AnyObject?
-            try throwIfError(
-                SecItemCopyMatching(query as CFDictionary, &itemCopy)
-            )
-            return itemCopy as? Data
+            try _readData()
         }
+    }
+
+    private func _readData() throws -> Data? {
+        var query = baseAttributes
+        query[String(kSecReturnData)] = kCFBooleanTrue as AnyObject
+
+        var itemCopy: AnyObject?
+        try throwIfError(
+            SecItemCopyMatching(query as CFDictionary, &itemCopy)
+        )
+        return itemCopy as? Data
     }
 
     /**
