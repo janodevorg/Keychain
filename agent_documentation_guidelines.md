@@ -13,24 +13,19 @@ Summary: Concise rules for creating AI-optimized technical documentation
 
 ## Authorial Style
 
-While the above guidelines focus on structure, the preferred authorial style is direct, engaging, and code-centric. When creating new documentation, adhere to the following stylistic patterns:
+The preferred authorial style is minimalist, precise, and similar to an **Architectural Decision Record (ADR)**. It prioritizes clarity and rationale over narrative.
 
-- **Engaging Openings**: Start documents with a direct question to engage the reader (e.g., "Did you know...?").
-- **Code-First Explanations**: Prioritize code examples. Every major point or concept should be immediately illustrated with a concise code snippet. The text should serve to explain the code.
-- **Clear Formatting**: Use short paragraphs and bold keywords (`<b>...</b>`) for emphasis and scannability.
-- **Use Asides for Detail**: For detailed examples or tangential information that would otherwise clutter the main text, use an "aside" block. This keeps the primary flow clean while providing depth. Link to it from the main text using a `<span>` tag.
+- **Declarative, Not Evolutionary**: State the final, implemented solution directly. Do not describe the history or evolution of the design. The focus is on what the system *does* now.
 
-  - **Link from text**: `(<span id="more1" title="hint1" anchorid="1">example</span>)`
-  - **Aside block structure**:
-    ```html
-    <div id="hint1" class="aside">
-      <h3>Aside Title</h3>
-      <div class="aside-text">
-        <p>Detailed explanation or code example goes here.</p>
-      </div>
-    </div>
-    ```
-- **Pragmatic Tone**: Maintain a practical, peer-to-peer tone. Include "words of caution" or pragmatic advice where appropriate.
+- **Code as the Core Artifact**: Center the document around a single, illustrative code block that demonstrates the core pattern or concept. The text should exist to introduce and justify this code.
+
+- **Emphasis Through Structure**: Use `###` headings for sections and `backticks` for code-related terms (e.g., `NSLock`, `actor`). Avoid using bolding for emphasis.
+
+- **Rationale as Bullet Points**: Justify design decisions using simple, scannable bulleted lists. This makes the reasoning clear and direct.
+
+- **Concise and Objective Tone**: Use formal, declarative language. State problems, solutions, and trade-offs as facts.
+
+- **Comparative Justification**: When explaining a design choice, briefly and pragmatically compare it against valid alternatives. Explain *why* the chosen solution is superior for the specific context.
 
 ## Guidelines
 
