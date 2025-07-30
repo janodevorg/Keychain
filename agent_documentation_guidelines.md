@@ -13,19 +13,18 @@ Summary: Concise rules for creating AI-optimized technical documentation
 
 ## Authorial Style
 
-The preferred authorial style is minimalist, precise, and similar to an **Architectural Decision Record (ADR)**. It prioritizes clarity and rationale over narrative.
+The preferred authorial style is direct, pragmatic, and code-centric.
 
-- **Declarative, Not Evolutionary**: State the final, implemented solution directly. Do not describe the history or evolution of the design. The focus is on what the system *does* now.
+- **Code-First Explanations**: Prioritize code examples. Every major point or concept should be immediately illustrated with a concise code snippet. The text should serve to explain the code, not the other way around.
 
-- **Code as the Core Artifact**: Center the document around a single, illustrative code block that demonstrates the core pattern or concept. The text should exist to introduce and justify this code.
+- **Emphasis Through Structure**: Use `###` headings for sections and `backticks` for code-related terms (e.g., `NSLock`). Avoid using bolding for emphasis.
 
-- **Emphasis Through Structure**: Use `###` headings for sections and `backticks` for code-related terms (e.g., `NSLock`, `actor`). Avoid using bolding for emphasis.
+- **Pragmatic Tone**: Maintain a practical, peer-to-peer tone. Include "words of caution" or pragmatic advice where appropriate.
 
-- **Rationale as Bullet Points**: Justify design decisions using simple, scannable bulleted lists. This makes the reasoning clear and direct.
+- **Use Asides for Detail**: For tangential information or deeper examples that would clutter the main text, use Markdown blockquote admonitions. This keeps the primary flow clean while providing depth.
 
-- **Concise and Objective Tone**: Use formal, declarative language. State problems, solutions, and trade-offs as facts.
-
-- **Comparative Justification**: When explaining a design choice, briefly and pragmatically compare it against valid alternatives. Explain *why* the chosen solution is superior for the specific context.
+  > [!NOTE]
+  > This is an example of an aside. It provides extra information and is rendered in a distinct box on platforms like GitHub.
 
 ## Guidelines
 
