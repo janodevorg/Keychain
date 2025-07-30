@@ -1,0 +1,33 @@
+{
+  "configurations" : [
+    {
+      "id" : "9DBE3E35-87A2-4C3C-9915-7D4E9738E56E",
+      "name" : "Configuration 1",
+      "options" : {
+        "codeSigning" : {
+          "useAutomaticSigning" : true
+        }
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "performanceAntipatternCheckerEnabled" : true,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Keychain.xcodeproj",
+      "identifier" : "239C1E3E71ED3851F47C821C",
+      "name" : "Keychain"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : false,
+      "target" : {
+        "containerPath" : "container:Keychain.xcodeproj",
+        "identifier" : "E98E9343C7B693983CBD3DDB",
+        "name" : "KeychainTests"
+      }
+    }
+  ],
+  "version" : 1
+}

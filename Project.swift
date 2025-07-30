@@ -10,7 +10,9 @@ let project = Project(
         "SWIFT_VERSION": "6.0",
         "IPHONEOS_DEPLOYMENT_TARGET": "18.0",
         "MACOSX_DEPLOYMENT_TARGET": "15.0",
-        "ENABLE_MODULE_VERIFIER": "YES"
+        "ENABLE_MODULE_VERIFIER": "YES",
+        "CODE_SIGN_STYLE": "Automatic",
+        "DEVELOPMENT_TEAM": "23KN7M4FPW"
     ]),
     targets: [
         .target(
@@ -30,9 +32,16 @@ let project = Project(
             product: .unitTests,
             bundleId: "dev.jano.keychain.test",
             sources: ["Sources/Tests/**"],
+            entitlements: "Sources/Tests/Configuration/TestKeychain.entitlements",
             dependencies: [
-                .target(name: "Keychain")
-            ]
+                .target(name: "Keychain"),
+                .project(target: "Example", path: "Example")
+            ],
+            settings: .settings(
+                base: [
+                    "TEST_HOST": "$(BUILT_PRODUCTS_DIR)/Example.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Example"
+                ]
+            )
         )
     ],
     schemes: [
