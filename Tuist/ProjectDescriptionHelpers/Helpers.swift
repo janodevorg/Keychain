@@ -14,8 +14,8 @@ public let baseSettings: ProjectDescription.Settings = .settings(base: [
     "CODE_SIGN_STYLE": "Automatic",
     "DEVELOPMENT_TEAM": "PPSF6CNP8Q",
     "ENABLE_USER_SCRIPT_SANDBOXING": "NO",
-    "IPHONEOS_DEPLOYMENT_TARGET": "18.0",
-    "MACOSX_DEPLOYMENT_TARGET": "15.0",
+    "IPHONEOS_DEPLOYMENT_TARGET": "26.0",
+    "MACOSX_DEPLOYMENT_TARGET": "26.0",
     "SWIFT_EMIT_LOC_STRINGS": "YES",
     "SWIFT_VERSION": "6.0"
 ])

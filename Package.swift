@@ -1,4 +1,4 @@
-// swift-tools-version:6.1
+// swift-tools-version:6.2
 @preconcurrency import PackageDescription
 
 let name = "Keychain"
@@ -6,8 +6,8 @@ let name = "Keychain"
 let package = Package(
     name: name,
     platforms: [
-        .iOS(.v18),
-        .macOS(.v15)
+        .iOS(.v26),
+        .macOS(.v26)
     ],
     products: [
         .library(name: name, targets: [name])
